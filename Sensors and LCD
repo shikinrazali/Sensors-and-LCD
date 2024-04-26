@@ -1,7 +1,7 @@
 #include <DHT.h>
 #include <LiquidCrystal_I2C.h>
 
-#define DHT11_PIN D5 // The ESP8266 pin D7 connected to DHT11 sensor 
+#define DHT11_PIN D4// The ESP8266 pin D4 connected to DHT11 sensor 
 #define AO_PIN A0  // ESP8266's pin connected to AO pin of the ldr module
 #define DO_PIN D0 // ESP8266's pin connected to DO pin of the rain sensor
 
@@ -51,6 +51,7 @@ void loop() {
   // wait a 2 seconds between readings
   delay(2000);
 }
+
 
   // wait a 2 seconds between readings
   delay(2000);
