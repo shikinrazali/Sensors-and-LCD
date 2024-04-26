@@ -1,56 +1,71 @@
 #include <DHT.h>
 #include <LiquidCrystal_I2C.h>
-
-#define DHT11_PIN D4// The ESP8266 pin D4 connected to DHT11 sensor 
-#define AO_PIN A0  // ESP8266's pin connected to AO pin of the ldr module
-#define DO_PIN D0 // ESP8266's pin connected to DO pin of the rain sensor
+#define DHT11_PIN D4 // The ESP8266 pin D4 connected to DHT11 sensor 
+#define AO_PIN    A0 
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);  // I2C address 0x27 (from DIYables LCD), 16 column and 2 rows
 DHT dht11(DHT11_PIN, DHT11);
 
 void setup() {
-  dht11.begin(); // initialize the DHT sensor
+  dht11.begin();
   lcd.init();         // Initialize the LCD I2C display
   lcd.backlight();    // open the backlight
 }
 
 void loop() {
-  float humid  = dht11.readHumidity();    // read humidity
-  float temperature_C = dht11.readTemperature(); // read temperature
-  int light = analogRead(A0);
-  int rain = digitalRead(D0);
+  float humid = dht11.readHumidity();
+  float temp = dht11.readTemperature();
+  int rain = analogRead(A0);
+  bool l = digitalRead(D0);
+
+  rain = map(rain, 0, 1023, 0, 100);//Converts the rainfall value from 0 to 100
+
+  void LDRsensor(){
+     bool light = digitalRead(light);
+     if(light == 0){
+        WidgetLED LED(V3);
+        LED.on();
+        lcd.setCursor(9,1);
+        lcd.print("L: ");
+        lcd.print("High");
+        lcd.print(" ");
+   } else if(light == 1){
+        WidgetLED LED(V3);
+        LED.off();
+        lcd.setCursor(9,1);
+        lcd.print("L: ");
+        lcd.print("Low");
+        lcd.print(" ");
+   }
+
   
-  lcd.clear();
   // check whether the reading is successful or not
-  if (isnan(temperature_C) || isnan(humid) || isnan(light) || isnan(rain)){
+ if (isnan(temp) || isnan(humid)) {
     lcd.setCursor(0, 0);
     lcd.print("Failed");
   } else {
-
     lcd.setCursor(0, 0);  // display position
-    lcd.print("T: ");
-    lcd.print(temperature_C);     // display the temperature
+    lcd.print("T:");
+    lcd.print(temp);     // display the temperature
     lcd.print(char(223));
     lcd.print("C");
 
     lcd.setCursor(0, 1);  // display position
-    lcd.print("H: ");
+    lcd.print("H:");
     lcd.print(humid);      // display the humidity
     lcd.print("%");
 
     lcd.setCursor(10,0);
-    lcd.print(" L: ");
-    lcd.print(light);
-    lcd.print(" ");
-
-    lcd.setCursor(10,1);
-    lcd.print(" R: ");
+    lcd.print(" R:");
     lcd.print(rain);
     lcd.print(" ");
+
   }
+
   // wait a 2 seconds between readings
   delay(2000);
 }
+
 
 
   // wait a 2 seconds between readings
