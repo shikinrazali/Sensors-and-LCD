@@ -18,26 +18,19 @@ void loop() {
   int rain = analogRead(A0);
   bool l = digitalRead(D0);
 
-  rain = map(rain, 0, 1023, 0, 100);//Converts the rainfall value from 0 to 100
+  rain = map(rain, 0, 1023, 100, 0);//Converts the rainfall value from 0 to 100
 
-  void LDRsensor(){
-     bool light = digitalRead(light);
-     if(light == 0){
-        WidgetLED LED(V3);
-        LED.on();
-        lcd.setCursor(9,1);
-        lcd.print("L: ");
-        lcd.print("High");
-        lcd.print(" ");
-   } else if(light == 1){
-        WidgetLED LED(V3);
-        LED.off();
-        lcd.setCursor(9,1);
-        lcd.print("L: ");
-        lcd.print("Low");
-        lcd.print(" ");
-   }
-
+  if(l == 1){
+   lcd.setCursor(9,1);
+    lcd.print("L:");
+    lcd.print("High");
+    lcd.print(" ");
+   } else if(l == 0){
+    lcd.setCursor(9,1);
+    lcd.print("L:");
+    lcd.print("Low");
+    lcd.print(" ");
+  }
   
   // check whether the reading is successful or not
  if (isnan(temp) || isnan(humid)) {
@@ -59,14 +52,7 @@ void loop() {
     lcd.print(" R:");
     lcd.print(rain);
     lcd.print(" ");
-
   }
-
-  // wait a 2 seconds between readings
-  delay(2000);
-}
-
-
 
   // wait a 2 seconds between readings
   delay(2000);
